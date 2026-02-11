@@ -1,0 +1,25 @@
+2025-01-15T08:00:01.123Z INFO  [main] Application starting, version=2.4.1, pid=18432
+2025-01-15T08:00:01.456Z INFO  [main] Loading configuration from /etc/cool-log-viewer/config.yaml
+2025-01-15T08:00:01.789Z INFO  [config] Parsed 12 configuration entries
+2025-01-15T08:00:02.034Z INFO  [db] Connecting to PostgreSQL at db-primary.internal:5432/appdb
+2025-01-15T08:00:02.510Z INFO  [db] Connection pool initialized, size=10, idle_timeout=300s
+2025-01-15T08:00:02.812Z WARN  [db] Slow connection handshake detected, elapsed=476ms (threshold=200ms)
+2025-01-15T08:00:03.001Z INFO  [http] Starting HTTP server on 0.0.0.0:8080
+2025-01-15T08:00:03.210Z INFO  [http] Registered 24 API routes
+2025-01-15T08:00:03.215Z INFO  [ws] WebSocket endpoint available at /ws/logs
+2025-01-15T08:00:05.891Z INFO  [http] GET /healthz 200 1ms - remote_addr=10.0.0.5
+2025-01-15T08:00:12.334Z INFO  [http] POST /api/v1/sessions 201 48ms - user=alice@example.com
+2025-01-15T08:00:14.770Z WARN  [auth] Token for user bob@example.com expires in 5 minutes, consider refreshing
+2025-01-15T08:00:15.002Z INFO  [http] GET /api/v1/logs?since=1h&level=error 200 312ms - user=alice@example.com
+2025-01-15T08:00:18.443Z ERROR [parser] Failed to parse log line at offset 884231: unexpected token at column 47
+2025-01-15T08:00:18.444Z WARN  [parser] Skipping malformed line, total_skipped=3 since startup
+2025-01-15T08:00:22.109Z ERROR [db] Query timeout after 5000ms: SELECT * FROM log_entries WHERE created_at > $1 ORDER BY created_at DESC LIMIT 1000
+    at QueryRunner.execute (src/db/query-runner.ts:142:15)
+    at ConnectionPool.query (src/db/pool.ts:89:22)
+    at LogRepository.findRecent (src/repositories/log-repository.ts:56:18)
+    at LogService.getRecentEntries (src/services/log-service.ts:31:25)
+    at async Router.handleRequest (src/http/router.ts:203:12)
+2025-01-15T08:00:22.115Z WARN  [http] Responding with 504 Gateway Timeout for request_id=req-a8f3b291
+2025-01-15T08:00:30.001Z INFO  [scheduler] Running periodic cleanup, removing entries older than 30 days
+2025-01-15T08:00:30.877Z INFO  [scheduler] Cleanup complete, removed 14,209 entries, freed 82MB
+2025-01-15T08:00:45.332Z INFO  [ws] Client connected, session_id=ws-c7e1d904, total_connections=7

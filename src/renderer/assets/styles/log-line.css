@@ -1,0 +1,47 @@
+.log-line {
+  font-family: var(--log-font);
+  font-size: var(--log-font-size);
+  line-height: var(--log-line-height);
+  height: var(--log-line-height);
+  white-space: pre;
+  overflow: hidden;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  cursor: default;
+  user-select: text;
+}
+
+.log-line:hover {
+  background-color: var(--bg-hover);
+}
+
+.log-line-number {
+  color: var(--text-muted);
+  min-width: 60px;
+  text-align: right;
+  padding-right: 12px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+.log-line-text {
+  flex: 1;
+  overflow: hidden;
+}
+
+.highlight-span {
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.search-match {
+  background-color: var(--search-match-bg);
+  border-radius: 2px;
+}
+
+.search-match-current {
+  background-color: var(--search-current-bg);
+  color: var(--search-current-text);
+  border-radius: 2px;
+}
