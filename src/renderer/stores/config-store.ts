@@ -2,6 +2,10 @@ import { create } from 'zustand'
 import type { AppConfig, ThemeMode } from '../types/config'
 import { DEFAULT_CONFIG } from '../types/config'
 
+const MIN_FONT_SIZE = 8
+const MAX_FONT_SIZE = 32
+const FONT_SIZE_STEP = 1
+
 interface ConfigStore {
   config: AppConfig
   isLoaded: boolean
@@ -10,6 +14,8 @@ interface ConfigStore {
   setTheme: (theme: ThemeMode) => void
   cycleTheme: () => void
   setFontSize: (size: number) => void
+  increaseFontSize: () => void
+  decreaseFontSize: () => void
   setMaxLines: (max: number) => void
 }
 
@@ -32,7 +38,19 @@ export const useConfigStore = create<ConfigStore>((set) => ({
     }),
 
   setFontSize: (fontSize) =>
-    set((state) => ({ config: { ...state.config, fontSize } })),
+    set((state) => ({
+      config: { ...state.config, fontSize: Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, fontSize)) }
+    })),
+
+  increaseFontSize: () =>
+    set((state) => ({
+      config: { ...state.config, fontSize: Math.min(MAX_FONT_SIZE, state.config.fontSize + FONT_SIZE_STEP) }
+    })),
+
+  decreaseFontSize: () =>
+    set((state) => ({
+      config: { ...state.config, fontSize: Math.max(MIN_FONT_SIZE, state.config.fontSize - FONT_SIZE_STEP) }
+    })),
 
   setMaxLines: (maxLines) =>
     set((state) => ({ config: { ...state.config, maxLines } }))

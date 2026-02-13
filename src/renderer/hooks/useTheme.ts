@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useConfigStore } from '../stores/config-store'
+import { getRowHeight } from '../lib/constants'
 import type { ThemeMode } from '../types/config'
 
 function getSystemTheme(): 'light' | 'dark' {
@@ -18,6 +19,7 @@ function applyTheme(mode: ThemeMode): void {
 
 export function useTheme(): void {
   const theme = useConfigStore((s) => s.config.theme)
+  const fontSize = useConfigStore((s) => s.config.fontSize)
 
   useEffect(() => {
     applyTheme(theme)
@@ -31,4 +33,11 @@ export function useTheme(): void {
     mediaQuery.addEventListener('change', handler)
     return () => mediaQuery.removeEventListener('change', handler)
   }, [theme])
+
+  // Sync font size to CSS variables
+  useEffect(() => {
+    const root = document.documentElement
+    root.style.setProperty('--log-font-size', `${fontSize}px`)
+    root.style.setProperty('--log-line-height', `${getRowHeight(fontSize)}px`)
+  }, [fontSize])
 }

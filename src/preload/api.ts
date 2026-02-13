@@ -27,6 +27,8 @@ export interface ElectronAPI {
   onMenuToggleFollow: (callback: () => void) => () => void
   onMenuToggleTheme: (callback: () => void) => () => void
   onMenuNextPane: (callback: () => void) => () => void
+  onMenuIncreaseFontSize: (callback: () => void) => () => void
+  onMenuDecreaseFontSize: (callback: () => void) => () => void
 }
 
 declare global {

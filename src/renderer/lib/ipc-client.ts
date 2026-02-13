@@ -27,5 +27,7 @@ export const ipcClient = {
   onMenuSplitVertical: (cb: () => void) => getApi().onMenuSplitVertical(cb),
   onMenuToggleFollow: (cb: () => void) => getApi().onMenuToggleFollow(cb),
   onMenuToggleTheme: (cb: () => void) => getApi().onMenuToggleTheme(cb),
-  onMenuNextPane: (cb: () => void) => getApi().onMenuNextPane(cb)
+  onMenuNextPane: (cb: () => void) => getApi().onMenuNextPane(cb),
+  onMenuIncreaseFontSize: (cb: () => void) => getApi().onMenuIncreaseFontSize(cb),
+  onMenuDecreaseFontSize: (cb: () => void) => getApi().onMenuDecreaseFontSize(cb)
 }

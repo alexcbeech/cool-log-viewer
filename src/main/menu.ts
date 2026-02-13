@@ -61,11 +61,32 @@ export function createMenu(): void {
         },
         {
           label: 'Split Vertical',
-          accelerator: 'CmdOrCtrl+-',
+          accelerator: 'CmdOrCtrl+Shift+\\',
           click: (): void => {
             const window = BrowserWindow.getFocusedWindow()
             if (window) {
               window.webContents.send(IPC.MENU_SPLIT_VERTICAL)
+            }
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Increase Font Size',
+          accelerator: 'CmdOrCtrl+=',
+          click: (): void => {
+            const window = BrowserWindow.getFocusedWindow()
+            if (window) {
+              window.webContents.send(IPC.MENU_INCREASE_FONT_SIZE)
+            }
+          }
+        },
+        {
+          label: 'Decrease Font Size',
+          accelerator: 'CmdOrCtrl+-',
+          click: (): void => {
+            const window = BrowserWindow.getFocusedWindow()
+            if (window) {
+              window.webContents.send(IPC.MENU_DECREASE_FONT_SIZE)
             }
           }
         },

@@ -10,6 +10,7 @@ import { usePaneStore } from './stores/pane-store'
 import { useLogStore } from './stores/log-store'
 import { useSearchStore } from './stores/search-store'
 import { useConfigStore } from './stores/config-store'
+import { useHighlightStore } from './stores/highlight-store'
 import { useTheme } from './hooks/useTheme'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import { ipcClient } from './lib/ipc-client'
@@ -130,6 +131,12 @@ export const App: React.FC = () => {
       ipcClient.onMenuToggleTheme(() => cycleTheme()),
       ipcClient.onMenuNextPane(() => {
         usePaneStore.getState().cycleActivePane()
+      }),
+      ipcClient.onMenuIncreaseFontSize(() => {
+        useConfigStore.getState().increaseFontSize()
+      }),
+      ipcClient.onMenuDecreaseFontSize(() => {
+        useConfigStore.getState().decreaseFontSize()
       })
     ]
 
@@ -140,7 +147,23 @@ export const App: React.FC = () => {
   useEffect(() => {
     ipcClient.loadConfig().then((config) => {
       if (config) {
-        useConfigStore.getState().setConfig(config as AppConfig)
+        const appConfig = config as AppConfig
+        useConfigStore.getState().setConfig(appConfig)
+        if (appConfig.highlightRules?.length) {
+          useHighlightStore.getState().setRules(appConfig.highlightRules)
+        }
+      }
+    })
+  }, [])
+
+  // Sync highlight rules into config store when they change
+  useEffect(() => {
+    return useHighlightStore.subscribe((state) => {
+      const configStore = useConfigStore.getState()
+      if (configStore.isLoaded) {
+        useConfigStore.setState({
+          config: { ...configStore.config, highlightRules: state.rules }
+        })
       }
     })
   }, [])

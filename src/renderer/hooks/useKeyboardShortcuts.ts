@@ -56,10 +56,24 @@ export function useKeyboardShortcuts(onOpenFile: () => void): void {
         return
       }
 
-      // Ctrl+-: Split vertical
-      if (ctrl && e.key === '-') {
+      // Ctrl+Shift+\: Split vertical
+      if (ctrl && e.shiftKey && e.key === '|') {
         e.preventDefault()
         usePaneStore.getState().splitPane(activePaneId, 'vertical')
+        return
+      }
+
+      // Ctrl+=: Increase font size
+      if (ctrl && e.key === '=') {
+        e.preventDefault()
+        useConfigStore.getState().increaseFontSize()
+        return
+      }
+
+      // Ctrl+-: Decrease font size
+      if (ctrl && e.key === '-') {
+        e.preventDefault()
+        useConfigStore.getState().decreaseFontSize()
         return
       }
 

@@ -22,7 +22,9 @@ export const IPC = {
   MENU_SPLIT_VERTICAL: 'menu:split-vertical',
   MENU_TOGGLE_FOLLOW: 'menu:toggle-follow',
   MENU_TOGGLE_THEME: 'menu:toggle-theme',
-  MENU_NEXT_PANE: 'menu:next-pane'
+  MENU_NEXT_PANE: 'menu:next-pane',
+  MENU_INCREASE_FONT_SIZE: 'menu:increase-font-size',
+  MENU_DECREASE_FONT_SIZE: 'menu:decrease-font-size'
 } as const
 
 export type IpcChannel = (typeof IPC)[keyof typeof IPC]

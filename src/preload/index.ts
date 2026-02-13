@@ -36,7 +36,9 @@ const api: ElectronAPI = {
   onMenuSplitVertical: createListener(IPC.MENU_SPLIT_VERTICAL) as ElectronAPI['onMenuSplitVertical'],
   onMenuToggleFollow: createListener(IPC.MENU_TOGGLE_FOLLOW) as ElectronAPI['onMenuToggleFollow'],
   onMenuToggleTheme: createListener(IPC.MENU_TOGGLE_THEME) as ElectronAPI['onMenuToggleTheme'],
-  onMenuNextPane: createListener(IPC.MENU_NEXT_PANE) as ElectronAPI['onMenuNextPane']
+  onMenuNextPane: createListener(IPC.MENU_NEXT_PANE) as ElectronAPI['onMenuNextPane'],
+  onMenuIncreaseFontSize: createListener(IPC.MENU_INCREASE_FONT_SIZE) as ElectronAPI['onMenuIncreaseFontSize'],
+  onMenuDecreaseFontSize: createListener(IPC.MENU_DECREASE_FONT_SIZE) as ElectronAPI['onMenuDecreaseFontSize']
 }
 
 contextBridge.exposeInMainWorld('electronAPI', api)

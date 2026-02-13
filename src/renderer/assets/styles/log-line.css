@@ -4,7 +4,6 @@
   line-height: var(--log-line-height);
   height: var(--log-line-height);
   white-space: pre;
-  overflow: hidden;
   padding: 0 8px;
   display: flex;
   align-items: center;
@@ -26,8 +25,7 @@
 }
 
 .log-line-text {
-  flex: 1;
-  overflow: hidden;
+  flex: 0 0 auto;
 }
 
 .highlight-span {

@@ -7,16 +7,10 @@ export function highlightLine(text: string, compiledRules: CompiledRule[]): High
 
   for (const { rule, regex } of compiledRules) {
     regex.lastIndex = 0
-    let match: RegExpExecArray | null
-
-    while ((match = regex.exec(text)) !== null) {
-      if (match[0].length === 0) {
-        regex.lastIndex++
-        continue
-      }
+    if (regex.test(text)) {
       spans.push({
-        start: match.index,
-        end: match.index + match[0].length,
+        start: 0,
+        end: text.length,
         color: rule.color,
         backgroundColor: rule.backgroundColor
       })
