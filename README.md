@@ -2,6 +2,14 @@
 
 A fast, multi-pane log file viewer built for developers who need to monitor and analyze log files in real time. View multiple log files side by side, search through them, highlight patterns, and watch them update live.
 
+## Download
+
+Pre-built binaries are available on the [Releases](https://github.com/alexcbeech/cool-log-viewer/releases) page. Download the appropriate file for your platform:
+
+- **Windows**: `.exe` installer or portable executable
+- **macOS**: `.dmg` disk image
+- **Linux**: `.AppImage`
+
 ## Features
 
 - **Multi-pane layout** — Split your view horizontally or vertically to monitor multiple log files at once. Drag the dividers to resize panes.
@@ -25,7 +33,9 @@ A fast, multi-pane log file viewer built for developers who need to monitor and 
 | `Escape` | Close search bar |
 | `Alt+F` | Toggle follow mode |
 | `Ctrl+\` | Split pane horizontally |
-| `Ctrl+-` | Split pane vertically |
+| `Ctrl+Shift+\` | Split pane vertically |
+| `Ctrl+=` | Increase font size |
+| `Ctrl+-` | Decrease font size |
 | `Ctrl+W` | Close active pane |
 | `Ctrl+Tab` | Cycle to next pane |
 | `Ctrl+T` | Toggle theme |
@@ -107,17 +117,18 @@ npm run build
 
 The compiled output is written to the `out/` folder.
 
-### Packaged installer (Windows)
+### Packaged builds
 
-To create a distributable Windows installer:
+To create distributable binaries:
 
 ```bash
 npm run dist
 ```
 
-This generates installers in the `dist/` folder:
-- **NSIS installer** (`.exe`) — A standard Windows setup wizard
-- **Portable** (`.exe`) — A standalone executable that runs without installation
+This generates platform-specific packages in the `dist/` folder:
+- **Windows**: NSIS installer (`.exe`) and portable executable (`.exe`)
+- **macOS**: DMG disk image (`.dmg`) — must be built on macOS
+- **Linux**: AppImage (`.AppImage`) — must be built on Linux
 
 ## Usage
 
@@ -133,7 +144,7 @@ There are three ways to open a log file:
 
 To view multiple files side by side:
 
-1. Click the split button in a pane's header bar (the two-rectangle icons), or use `Ctrl+\` for horizontal split and `Ctrl+-` for vertical split
+1. Click the split button in a pane's header bar (the two-rectangle icons), or use `Ctrl+\` for horizontal split and `Ctrl+Shift+\` for vertical split
 2. Open a different file in the new pane
 3. Drag the divider between panes to resize them
 4. Close a pane with the X button or `Ctrl+W`
