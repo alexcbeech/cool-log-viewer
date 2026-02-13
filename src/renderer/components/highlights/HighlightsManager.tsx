@@ -25,7 +25,7 @@ export const HighlightsManager: React.FC<HighlightsManagerProps> = ({ isOpen, on
       label: newPattern,
       pattern: newPattern,
       isRegex: newIsRegex,
-      caseSensitive: false,
+      caseSensitive: true,
       color: '#ffffff',
       backgroundColor: randomColor(),
       enabled: true

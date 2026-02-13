@@ -9,3 +9,4 @@ resources/test-fixtures/medium.log
 *.tsbuildinfo
 .DS_Store
 Thumbs.db
+.claude/settings.local.json
