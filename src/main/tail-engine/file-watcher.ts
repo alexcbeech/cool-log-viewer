@@ -12,11 +12,13 @@ export class FileWatcher {
 
     this.watcher = chokidar.watch(filePath, {
       persistent: true,
-      usePolling: false,
-      awaitWriteFinish: false,
-      ignoreInitial: true,
-      // Fallback to polling if native watching fails
-      interval: WATCHER_POLL_MS
+      usePolling: true, // Enable polling for reliable log tailing across all platforms
+      interval: WATCHER_POLL_MS,
+      awaitWriteFinish: {
+        stabilityThreshold: 100, // Wait 100ms after last write to ensure file is stable
+        pollInterval: 50
+      },
+      ignoreInitial: true
     })
 
     this.watcher.on('change', () => {
