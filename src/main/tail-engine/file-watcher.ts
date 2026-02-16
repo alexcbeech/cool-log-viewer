@@ -23,7 +23,6 @@ export class FileWatcher {
     })
 
     this.watcher.on('change', () => {
-      logger.info(`File changed: ${filePath}`)
       if (this.debounceTimer) {
         clearTimeout(this.debounceTimer)
       }
