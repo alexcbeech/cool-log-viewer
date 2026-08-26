@@ -230,4 +230,4 @@ npm run test:e2e
 
 ## License
 
-This project is for personal/internal use.
+Cool Log Viewer is available under the [MIT License](LICENSE).
