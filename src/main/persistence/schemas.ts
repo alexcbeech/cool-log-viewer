@@ -48,7 +48,7 @@ interface PaneSplitData {
 type PaneNodeData = PaneLeafData | PaneSplitData
 
 export const paneNodeSchema: z.ZodType<PaneNodeData> = z.lazy(() =>
-  z.discriminatedUnion('type', [
+  z.union([
     paneLeafSchema,
     z.object({
       type: z.literal('split'),

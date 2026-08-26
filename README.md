@@ -44,7 +44,7 @@ Pre-built binaries are available on the [Releases](https://github.com/alexcbeech
 
 Before you can run this application, you need to install the following software on your computer:
 
-### 1. Node.js (version 18 or later)
+### 1. Node.js (version 22.12 or later)
 
 Node.js is the runtime that powers this application.
 
@@ -55,7 +55,7 @@ Node.js is the runtime that powers this application.
    ```
    node --version
    ```
-   You should see a version number like `v20.x.x` or `v22.x.x`.
+   You should see `v22.12.0` or later.
 
 ### 2. Git
 
@@ -93,7 +93,7 @@ This downloads all the libraries the application needs. It may take a few minute
 npm install
 ```
 
-You may see some warnings during installation — these are generally safe to ignore as long as the command completes without errors.
+Review installation warnings, especially security or unsupported-version notices, before continuing.
 
 ## Running the Application
 
@@ -172,8 +172,8 @@ Click the theme icon in the bottom-right corner to cycle between Light, Dark, an
 
 ### "npm install" fails
 
-- Make sure you have Node.js 18 or later: `node --version`
-- Try deleting the `node_modules` folder and `package-lock.json`, then run `npm install` again
+- Make sure you have Node.js 22.12 or later: `node --version`
+- Run `npm ci` to reinstall the exact dependency versions recorded in `package-lock.json`
 - On Windows, run your terminal as Administrator if you see permission errors
 
 ### The app window doesn't open
@@ -202,6 +202,18 @@ To run tests in watch mode (re-runs on file changes):
 
 ```bash
 npm run test:watch
+```
+
+Run all local quality gates with:
+
+```bash
+npm run check
+```
+
+Run the Electron launch smoke test with:
+
+```bash
+npm run test:e2e
 ```
 
 ## Tech Stack

@@ -1,17 +1,17 @@
-import chokidar from 'chokidar'
+import chokidar, { type FSWatcher } from 'chokidar'
 import { WATCHER_DEBOUNCE_MS, WATCHER_POLL_MS } from '@shared/constants'
 import { logger } from '../utils/logger'
 
-export type WatcherCallback = (eventType: 'change' | 'unlink') => void
+export type WatcherCallback = (eventType: 'change' | 'unlink') => void | Promise<void>
 
 export class FileWatcher {
-  private watcher: chokidar.FSWatcher | null = null
+  private watcher: FSWatcher | null = null
   private debounceTimer: ReturnType<typeof setTimeout> | null = null
 
   async start(filePath: string, callback: WatcherCallback): Promise<void> {
-    this.stop()
+    await this.stop()
 
-    this.watcher = chokidar.watch(filePath, {
+    const watcher = chokidar.watch(filePath, {
       persistent: true,
       usePolling: true, // Enable polling for reliable log tailing across all platforms
       interval: WATCHER_POLL_MS,
@@ -21,36 +21,49 @@ export class FileWatcher {
       },
       ignoreInitial: true
     })
+    this.watcher = watcher
 
-    this.watcher.on('change', () => {
+    watcher.on('change', () => {
       if (this.debounceTimer) {
         clearTimeout(this.debounceTimer)
       }
       this.debounceTimer = setTimeout(() => {
-        callback('change')
+        void callback('change')
       }, WATCHER_DEBOUNCE_MS)
     })
 
-    this.watcher.on('unlink', () => {
+    watcher.on('unlink', () => {
       logger.info(`File unlinked: ${filePath}`)
-      callback('unlink')
+      void callback('unlink')
     })
 
-    this.watcher.on('error', (error) => {
-      logger.error(`File watcher error for ${filePath}:`, error)
+    await new Promise<void>((resolve, reject) => {
+      let ready = false
+      watcher.on('error', (error: unknown) => {
+        if (ready) {
+          logger.error(`File watcher error for ${filePath}:`, error)
+        } else {
+          reject(error)
+        }
+      })
+      watcher.once('ready', () => {
+        ready = true
+        resolve()
+      })
     })
 
     logger.info(`Started watching: ${filePath} (polling mode)`)
   }
 
-  stop(): void {
+  async stop(): Promise<void> {
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer)
       this.debounceTimer = null
     }
     if (this.watcher) {
-      this.watcher.close()
+      const watcher = this.watcher
       this.watcher = null
+      await watcher.close()
     }
   }
 }

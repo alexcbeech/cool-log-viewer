@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync, renameSync } from 'fs'
-import { dirname, join } from 'path'
+import { dirname } from 'path'
 import { getConfigFilePath } from '../utils/paths'
 import { configSchema, type ConfigData } from './schemas'
 import { migrateConfig } from './migrations'

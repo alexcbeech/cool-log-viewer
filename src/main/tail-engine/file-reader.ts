@@ -1,15 +1,22 @@
-import { open, read, fstat, close } from 'fs'
+import { close, fstat, open, read } from 'fs'
 import { promisify } from 'util'
-import { READ_CHUNK_BYTES, INITIAL_CHUNK_SIZE } from '@shared/constants'
+import { INITIAL_CHUNK_SIZE, READ_CHUNK_BYTES } from '@shared/constants'
 
 const fsOpen = promisify(open)
 const fsRead = promisify(read)
 const fsFstat = promisify(fstat)
 const fsClose = promisify(close)
 
-export interface ReadResult {
+export interface ReadLastLinesResult {
   lines: string[]
   byteOffset: number
+  hasTrailingPartial: boolean
+}
+
+export interface ReadChunkResult {
+  content: Buffer
+  byteOffset: number
+  hasMore: boolean
 }
 
 /**
@@ -19,51 +26,49 @@ export interface ReadResult {
 export async function readLastLines(
   filePath: string,
   maxLines: number = INITIAL_CHUNK_SIZE
-): Promise<ReadResult> {
+): Promise<ReadLastLinesResult> {
   const fd = await fsOpen(filePath, 'r')
   try {
     const stats = await fsFstat(fd)
     const fileSize = stats.size
 
     if (fileSize === 0) {
-      return { lines: [], byteOffset: 0 }
+      return { lines: [], byteOffset: 0, hasTrailingPartial: false }
     }
 
-    const lines: string[] = []
-    let remainder = ''
+    const chunks: Buffer[] = []
+    let newlineCount = 0
     let position = fileSize
 
-    while (position > 0 && lines.length < maxLines) {
+    while (position > 0 && newlineCount <= maxLines) {
       const chunkSize = Math.min(READ_CHUNK_BYTES, position)
       position -= chunkSize
 
-      const buffer = Buffer.alloc(chunkSize)
-      await fsRead(fd, buffer, 0, chunkSize, position)
+      const buffer = Buffer.allocUnsafe(chunkSize)
+      const { bytesRead } = await fsRead(fd, buffer, 0, chunkSize, position)
+      const content = buffer.subarray(0, bytesRead)
+      chunks.unshift(content)
 
-      const chunk = buffer.toString('utf-8') + remainder
-      const chunkLines = chunk.split('\n')
-
-      // The first element might be a partial line
-      remainder = chunkLines[0]
-
-      // Add complete lines in reverse
-      for (let i = chunkLines.length - 1; i >= 1; i--) {
-        lines.unshift(chunkLines[i])
-        if (lines.length >= maxLines) break
+      for (const byte of content) {
+        if (byte === 0x0a) newlineCount++
       }
     }
 
-    // Add any remaining text as the first line
-    if (remainder && lines.length < maxLines) {
-      lines.unshift(remainder)
+    let content = Buffer.concat(chunks)
+    if (position > 0) {
+      const firstNewline = content.indexOf(0x0a)
+      content = firstNewline >= 0 ? content.subarray(firstNewline + 1) : Buffer.alloc(0)
     }
 
-    // Remove trailing empty line from final newline
-    if (lines.length > 0 && lines[lines.length - 1] === '') {
-      lines.pop()
-    }
+    const hasTrailingPartial = content.length > 0 && content[content.length - 1] !== 0x0a
+    const lines = content.toString('utf8').split('\n').map(stripCarriageReturn)
+    if (!hasTrailingPartial) lines.pop()
 
-    return { lines, byteOffset: fileSize }
+    return {
+      lines: lines.slice(-maxLines),
+      byteOffset: fileSize,
+      hasTrailingPartial
+    }
   } finally {
     await fsClose(fd)
   }
@@ -76,7 +81,7 @@ export async function readLastLines(
 export async function readFromOffset(
   filePath: string,
   fromOffset: number
-): Promise<ReadResult> {
+): Promise<ReadChunkResult> {
   const fd = await fsOpen(filePath, 'r')
   try {
     const stats = await fsFstat(fd)
@@ -84,29 +89,28 @@ export async function readFromOffset(
 
     // Truncation detection
     if (fileSize < fromOffset) {
-      return { lines: [], byteOffset: -1 } // -1 signals truncation
+      return { content: Buffer.alloc(0), byteOffset: -1, hasMore: false }
     }
 
     if (fileSize === fromOffset) {
-      return { lines: [], byteOffset: fileSize }
+      return { content: Buffer.alloc(0), byteOffset: fileSize, hasMore: false }
     }
 
-    const bytesToRead = fileSize - fromOffset
-    const buffer = Buffer.alloc(bytesToRead)
-    await fsRead(fd, buffer, 0, bytesToRead, fromOffset)
-
-    const text = buffer.toString('utf-8')
-    const lines = text.split('\n')
-
-    // Remove trailing empty line
-    if (lines.length > 0 && lines[lines.length - 1] === '') {
-      lines.pop()
+    const buffer = Buffer.allocUnsafe(Math.min(READ_CHUNK_BYTES, fileSize - fromOffset))
+    const { bytesRead } = await fsRead(fd, buffer, 0, buffer.length, fromOffset)
+    const byteOffset = fromOffset + bytesRead
+    return {
+      content: buffer.subarray(0, bytesRead),
+      byteOffset,
+      hasMore: byteOffset < fileSize
     }
-
-    return { lines, byteOffset: fileSize }
   } finally {
     await fsClose(fd)
   }
+}
+
+function stripCarriageReturn(line: string): string {
+  return line.endsWith('\r') ? line.slice(0, -1) : line
 }
 
 /**

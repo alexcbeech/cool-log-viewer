@@ -15,7 +15,8 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   ...props
 }) => {
-  const base = 'inline-flex items-center justify-center rounded transition-colors focus:outline-none disabled:opacity-50'
+  const base =
+    'inline-flex items-center justify-center rounded transition-colors focus:outline-none disabled:opacity-50'
   const variants = {
     default: 'border border-[var(--border-primary)] hover:bg-[var(--bg-hover)]',
     ghost: 'hover:bg-[var(--bg-hover)]',
@@ -34,7 +35,7 @@ export const Button: React.FC<ButtonProps> = ({
           height: size === 'sm' ? 26 : 32,
           width: size === 'sm' ? 26 : 32,
           minWidth: size === 'sm' ? 26 : 32,
-          ...style,
+          ...style
         }
       : style
 

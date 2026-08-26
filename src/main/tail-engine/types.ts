@@ -5,4 +5,4 @@ export interface TailSession {
   isActive: boolean
 }
 
-export type LineCallback = (lines: string[], isInitial: boolean) => void
+export type LineCallback = (lines: string[], isInitial: boolean, replaceLast?: boolean) => void

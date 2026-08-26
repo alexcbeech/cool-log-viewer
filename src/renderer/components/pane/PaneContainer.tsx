@@ -12,11 +12,22 @@ interface PaneContainerProps {
   onClosePane: (paneId: string) => void
 }
 
-export const PaneContainer: React.FC<PaneContainerProps> = ({ node, onOpenFileForPane, onClosePane }) => {
+export const PaneContainer: React.FC<PaneContainerProps> = ({
+  node,
+  onOpenFileForPane,
+  onClosePane
+}) => {
   const setSizes = usePaneStore((s) => s.setSizes)
 
   if (isLeaf(node)) {
-    return <Pane paneId={node.id} filePath={node.filePath} onOpenFile={() => onOpenFileForPane(node.id)} onClosePane={() => onClosePane(node.id)} />
+    return (
+      <Pane
+        paneId={node.id}
+        filePath={node.filePath}
+        onOpenFile={() => onOpenFileForPane(node.id)}
+        onClosePane={() => onClosePane(node.id)}
+      />
+    )
   }
 
   const isVertical = node.direction === 'vertical'
@@ -29,7 +40,11 @@ export const PaneContainer: React.FC<PaneContainerProps> = ({ node, onOpenFileFo
     >
       {node.children.map((child) => (
         <Allotment.Pane key={child.id}>
-          <PaneContainer node={child} onOpenFileForPane={onOpenFileForPane} onClosePane={onClosePane} />
+          <PaneContainer
+            node={child}
+            onOpenFileForPane={onOpenFileForPane}
+            onClosePane={onClosePane}
+          />
         </Allotment.Pane>
       ))}
     </Allotment>

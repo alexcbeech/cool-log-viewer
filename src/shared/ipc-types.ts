@@ -7,6 +7,7 @@ export interface FileLinesPayload {
   paneId: string
   lines: string[]
   isInitial: boolean
+  replaceLast: boolean
 }
 
 export interface FileErrorPayload {

@@ -35,16 +35,6 @@ function findNode(root: PaneNode, id: string): PaneNode | null {
   return null
 }
 
-function findParent(root: PaneNode, id: string): PaneSplit | null {
-  if (isLeaf(root)) return null
-  for (const child of root.children) {
-    if (child.id === id) return root as PaneSplit
-    const found = findParent(child, id)
-    if (found) return found
-  }
-  return null
-}
-
 // Replace exactly one occurrence of the node with the given id.
 // Does NOT recurse into the replacement, so the replacement can safely
 // contain a child with the same id as the node being replaced.
@@ -111,7 +101,7 @@ interface PaneStore {
 
 const initialLeaf = createLeaf()
 
-export const usePaneStore = create<PaneStore>((set, get) => ({
+export const usePaneStore = create<PaneStore>((set) => ({
   root: initialLeaf,
   activePaneId: initialLeaf.id,
 

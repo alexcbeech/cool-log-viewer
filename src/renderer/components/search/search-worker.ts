@@ -1,4 +1,5 @@
 interface SearchRequest {
+  requestId: number
   paneId: string
   lines: string[]
   query: string
@@ -13,7 +14,7 @@ interface SearchMatch {
 }
 
 self.onmessage = (event: MessageEvent<SearchRequest>) => {
-  const { paneId, lines, query, isRegex, caseSensitive } = event.data
+  const { requestId, paneId, lines, query, isRegex, caseSensitive } = event.data
   const matches: SearchMatch[] = []
 
   try {
@@ -41,7 +42,7 @@ self.onmessage = (event: MessageEvent<SearchRequest>) => {
     // Invalid regex — return empty matches
   }
 
-  self.postMessage({ paneId, matches })
+  self.postMessage({ requestId, paneId, matches })
 }
 
 function escapeRegex(str: string): string {

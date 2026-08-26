@@ -1,6 +1,8 @@
 node_modules/
+.npm-cache/
 out/
 dist/
+test-results/
 *.log
 !resources/test-fixtures/small.log
 resources/test-fixtures/medium.log

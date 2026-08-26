@@ -4,7 +4,7 @@
 A fast, multi-pane log viewer for developers (Electron + React). Windows-first MVP: one file per pane, no tabs.
 
 ## Tech Stack
-- **Shell:** Electron 34.x + electron-vite 3.x
+- **Shell:** Electron 44.x + electron-vite 3.x
 - **UI:** React 19 + TypeScript 5, Zustand 5.x, @tanstack/react-virtual 3.x, allotment 1.x
 - **Styling:** Tailwind CSS 4.x via `@tailwindcss/vite` plugin + inline styles for layout-critical components
 - **File watching:** chokidar 4.x
@@ -108,15 +108,15 @@ src/
 ```
 
 ## Tests
-- `tests/unit/renderer/highlight-engine.test.ts` (11 tests)
-- `tests/unit/renderer/pane-store.test.ts` (13 tests)
-- `tests/unit/main/line-buffer.test.ts` (14 tests)
+- Renderer unit tests cover highlighting, pane layout, and partial-line replacement.
+- Main-process unit tests cover buffering, UTF-8 line assembly, and file reads.
+- `tests/e2e/app.spec.ts` verifies that the production build launches under Electron.
 
 ## Test Fixtures
 - `resources/test-fixtures/small.log` — 26-line sample log
 - `resources/test-fixtures/generate-medium-log.js` — generates `medium.log` (100k lines, ~8.5MB)
 
 ## Known Limitations
-- Windows-only build targets (NSIS installer + portable). Could be extended for macOS/Linux.
-- E2E tests (Playwright) not yet written.
+- Cross-platform packages must be built and smoke-tested on their target operating system.
+- E2E coverage currently contains only a launch smoke test.
 - No tab support — each pane holds exactly one file.

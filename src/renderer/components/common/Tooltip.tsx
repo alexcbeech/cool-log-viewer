@@ -10,7 +10,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
   const [visible, setVisible] = useState(false)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [adjustedX, setAdjustedX] = useState<number | null>(null)
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>()
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const triggerRef = useRef<HTMLDivElement>(null)
   const tooltipRef = useRef<HTMLDivElement>(null)
 
@@ -20,7 +20,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
         const rect = triggerRef.current.getBoundingClientRect()
         setPosition({
           x: rect.left + rect.width / 2,
-          y: rect.top - 4,
+          y: rect.top - 4
         })
         setAdjustedX(null)
       }
@@ -55,7 +55,12 @@ export const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
   }, [visible, position])
 
   return (
-    <div ref={triggerRef} style={{ display: 'inline-flex' }} onMouseEnter={show} onMouseLeave={hide}>
+    <div
+      ref={triggerRef}
+      style={{ display: 'inline-flex' }}
+      onMouseEnter={show}
+      onMouseLeave={hide}
+    >
       {children}
       {visible &&
         createPortal(
@@ -75,7 +80,7 @@ export const Tooltip: React.FC<TooltipProps> = ({ content, children }) => {
               fontSize: 12,
               color: 'var(--text-primary)',
               boxShadow: '0 2px 8px rgba(0,0,0,0.25)',
-              pointerEvents: 'none',
+              pointerEvents: 'none'
             }}
           >
             {content}

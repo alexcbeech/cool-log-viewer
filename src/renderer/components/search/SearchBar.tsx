@@ -4,7 +4,6 @@ import { Input } from '../common/Input'
 import { Button } from '../common/Button'
 import { Toggle } from '../common/Toggle'
 import { useSearchStore } from '../../stores/search-store'
-import { useLogStore } from '../../stores/log-store'
 import { useSearch } from './useSearch'
 
 interface SearchBarProps {
@@ -83,13 +82,23 @@ export const SearchBar: React.FC<SearchBarProps> = ({ paneId }) => {
       <span className="min-w-[60px] text-center text-xs text-[var(--text-secondary)]">
         {searchState.isSearching ? 'Searching...' : matchText}
       </span>
-      <Button variant="icon" size="sm" onClick={() => prevMatch(paneId)} title="Previous (Shift+F3)">
+      <Button
+        variant="icon"
+        size="sm"
+        onClick={() => prevMatch(paneId)}
+        title="Previous (Shift+F3)"
+      >
         <ChevronUp size={14} />
       </Button>
       <Button variant="icon" size="sm" onClick={() => nextMatch(paneId)} title="Next (F3)">
         <ChevronDown size={14} />
       </Button>
-      <Button variant="icon" size="sm" onClick={() => setSearchOpen(paneId, false)} title="Close (Escape)">
+      <Button
+        variant="icon"
+        size="sm"
+        onClick={() => setSearchOpen(paneId, false)}
+        title="Close (Escape)"
+      >
         <X size={14} />
       </Button>
     </div>

@@ -10,10 +10,13 @@
     "start": "electron-vite preview",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint src/",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\"",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css,json}\" \"tests/**/*.{ts,tsx}\" \".github/**/*.yml\" \"*.{ts,mts,json,yml}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css,json}\" \"tests/**/*.{ts,tsx}\" \".github/**/*.yml\" \"*.{ts,mts,json,yml}\"",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test",
+    "test:e2e": "npm run build && playwright test",
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
@@ -36,18 +39,22 @@
     "@types/node": "^22.13.1",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.24.0",
-    "@typescript-eslint/parser": "^8.24.0",
+    "@typescript-eslint/eslint-plugin": "^8.68.0",
+    "@typescript-eslint/parser": "^8.68.0",
     "@vitejs/plugin-react": "^4.3.4",
-    "electron": "^34.2.0",
-    "electron-builder": "^25.1.8",
+    "electron": "^44.0.0",
+    "electron-builder": "^26.15.3",
     "electron-vite": "^3.0.8",
-    "eslint": "^9.20.0",
+    "eslint": "^10.9.1",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "jsdom": "^26.0.0",
     "prettier": "^3.5.1",
     "tailwindcss": "^4.0.6",
     "typescript": "^5.7.3",
-    "vite": "^6.1.0",
-    "vitest": "^3.0.5"
+    "vite": "^6.4.3",
+    "vitest": "^3.2.7"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

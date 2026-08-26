@@ -76,7 +76,12 @@ describe('highlightLine', () => {
 
   describe('regex pattern matching', () => {
     it('highlights the entire line when regex matches', () => {
-      const rule = makeRule({ pattern: '\\d+', isRegex: true, color: '#00ff00', backgroundColor: '#001100' })
+      const rule = makeRule({
+        pattern: '\\d+',
+        isRegex: true,
+        color: '#00ff00',
+        backgroundColor: '#001100'
+      })
       const compiled = compileRegex('\\d+', rule)
       const text = 'count: 42 items'
 
@@ -134,8 +139,18 @@ describe('highlightLine', () => {
     })
 
     it('both rules produce full-line spans when matching different patterns', () => {
-      const ruleA = makeRule({ id: 'a', pattern: 'abc', color: '#aa0000', backgroundColor: '#110000' })
-      const ruleB = makeRule({ id: 'b', pattern: 'fgh', color: '#00bb00', backgroundColor: '#001100' })
+      const ruleA = makeRule({
+        id: 'a',
+        pattern: 'abc',
+        color: '#aa0000',
+        backgroundColor: '#110000'
+      })
+      const ruleB = makeRule({
+        id: 'b',
+        pattern: 'fgh',
+        color: '#00bb00',
+        backgroundColor: '#001100'
+      })
       const compiledA = compileString('abc', ruleA)
       const compiledB = compileString('fgh', ruleB)
       const text = 'abcdefgh'
@@ -150,7 +165,12 @@ describe('highlightLine', () => {
 
   describe('case insensitive matching', () => {
     it('matches regardless of case when caseSensitive is false', () => {
-      const rule = makeRule({ pattern: 'error', caseSensitive: false, color: '#ff0000', backgroundColor: '#000000' })
+      const rule = makeRule({
+        pattern: 'error',
+        caseSensitive: false,
+        color: '#ff0000',
+        backgroundColor: '#000000'
+      })
       const compiled = compileString('error', rule)
       const text = 'An ERROR and an Error occurred'
 

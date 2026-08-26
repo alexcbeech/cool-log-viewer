@@ -23,13 +23,16 @@ export const HighlightRuleRow: React.FC<HighlightRuleRowProps> = ({ rule }) => {
       />
       <span
         className="flex-1 truncate text-xs font-mono"
-        style={{ backgroundColor: rule.backgroundColor, color: rule.color, padding: '1px 4px', borderRadius: '2px' }}
+        style={{
+          backgroundColor: rule.backgroundColor,
+          color: rule.color,
+          padding: '1px 4px',
+          borderRadius: '2px'
+        }}
       >
         {rule.pattern}
       </span>
-      {rule.isRegex && (
-        <span className="text-xs text-[var(--text-muted)]">regex</span>
-      )}
+      {rule.isRegex && <span className="text-xs text-[var(--text-muted)]">regex</span>}
       <Button
         variant="icon"
         size="sm"

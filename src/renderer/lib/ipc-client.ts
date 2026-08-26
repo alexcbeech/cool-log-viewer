@@ -1,4 +1,4 @@
-import type { ElectronAPI } from '../../preload/api'
+import type { ElectronAPI } from '@shared/electron-api'
 
 function getApi(): ElectronAPI {
   return window.electronAPI
@@ -6,6 +6,7 @@ function getApi(): ElectronAPI {
 
 export const ipcClient = {
   openFileDialog: () => getApi().openFileDialog(),
+  getPathForFile: (file: File) => getApi().getPathForFile(file),
   startTail: (paneId: string, filePath: string) => getApi().startTail(paneId, filePath),
   stopTail: (paneId: string) => getApi().stopTail(paneId),
   stopAllTails: () => getApi().stopAllTails(),

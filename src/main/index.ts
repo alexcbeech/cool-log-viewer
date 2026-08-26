@@ -43,7 +43,9 @@ function createWindow(): void {
   })
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
+    if (isSafeExternalUrl(details.url)) {
+      void shell.openExternal(details.url)
+    }
     return { action: 'deny' }
   })
 
@@ -73,4 +75,13 @@ app.on('window-all-closed', () => {
 
 export function getMainWindow(): BrowserWindow | null {
   return mainWindow
+}
+
+function isSafeExternalUrl(value: string): boolean {
+  try {
+    const { protocol } = new URL(value)
+    return protocol === 'https:' || protocol === 'http:'
+  } catch {
+    return false
+  }
 }

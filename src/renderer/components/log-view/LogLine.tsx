@@ -95,8 +95,7 @@ function buildRenderSpans(
     const spanText = text.slice(start, end)
 
     // Check if this span is the current search match
-    const isCurrentSearch = currentMatch &&
-      start >= currentMatch.start && end <= currentMatch.end
+    const isCurrentSearch = currentMatch && start >= currentMatch.start && end <= currentMatch.end
     if (isCurrentSearch) {
       result.push({
         start,

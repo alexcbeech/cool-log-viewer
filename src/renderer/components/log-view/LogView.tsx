@@ -23,6 +23,8 @@ export const LogView: React.FC<LogViewProps> = ({ paneId }) => {
   const fontSize = useConfigStore((s) => s.config.fontSize)
   const rowHeight = getRowHeight(fontSize)
 
+  // TanStack Virtual intentionally returns non-memoizable functions; React Compiler skips this component.
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: lines.length,
     getScrollElement: () => parentRef.current,
@@ -88,12 +90,11 @@ export const LogView: React.FC<LogViewProps> = ({ paneId }) => {
           const line = lines[virtualRow.index]
           if (!line) return null
 
-          const matchesForLine = searchState.matches.filter(
-            (m) => m.lineIndex === virtualRow.index
-          )
-          const currentMatch = searchState.currentMatchIndex >= 0
-            ? searchState.matches[searchState.currentMatchIndex]
-            : null
+          const matchesForLine = searchState.matches.filter((m) => m.lineIndex === virtualRow.index)
+          const currentMatch =
+            searchState.currentMatchIndex >= 0
+              ? searchState.matches[searchState.currentMatchIndex]
+              : null
           const isCurrentMatchLine = currentMatch?.lineIndex === virtualRow.index
 
           return (

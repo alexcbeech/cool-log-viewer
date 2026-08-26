@@ -1,4 +1,5 @@
 import { useState, useCallback, type DragEvent } from 'react'
+import { ipcClient } from '../lib/ipc-client'
 
 interface DragDropResult {
   isDragOver: boolean
@@ -31,8 +32,9 @@ export function useDragDrop(onFileDrop: (filePath: string) => void): DragDropRes
       const files = e.dataTransfer?.files
       if (files && files.length > 0) {
         const file = files[0]
-        if (file.path) {
-          onFileDrop(file.path)
+        const filePath = ipcClient.getPathForFile(file)
+        if (filePath) {
+          onFileDrop(filePath)
         }
       }
     },

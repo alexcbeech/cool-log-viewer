@@ -73,6 +73,5 @@ export const useHighlightStore = create<HighlightStore>((set) => ({
       return { rules: reordered, compiledRules: compileRules(reordered) }
     }),
 
-  setRules: (rules) =>
-    set(() => ({ rules, compiledRules: compileRules(rules) }))
+  setRules: (rules) => set(() => ({ rules, compiledRules: compileRules(rules) }))
 }))

@@ -27,8 +27,7 @@ export const useConfigStore = create<ConfigStore>((set) => ({
 
   setConfig: (config) => set({ config, isLoaded: true }),
 
-  setTheme: (theme) =>
-    set((state) => ({ config: { ...state.config, theme } })),
+  setTheme: (theme) => set((state) => ({ config: { ...state.config, theme } })),
 
   cycleTheme: () =>
     set((state) => {
@@ -39,19 +38,27 @@ export const useConfigStore = create<ConfigStore>((set) => ({
 
   setFontSize: (fontSize) =>
     set((state) => ({
-      config: { ...state.config, fontSize: Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, fontSize)) }
+      config: {
+        ...state.config,
+        fontSize: Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, fontSize))
+      }
     })),
 
   increaseFontSize: () =>
     set((state) => ({
-      config: { ...state.config, fontSize: Math.min(MAX_FONT_SIZE, state.config.fontSize + FONT_SIZE_STEP) }
+      config: {
+        ...state.config,
+        fontSize: Math.min(MAX_FONT_SIZE, state.config.fontSize + FONT_SIZE_STEP)
+      }
     })),
 
   decreaseFontSize: () =>
     set((state) => ({
-      config: { ...state.config, fontSize: Math.max(MIN_FONT_SIZE, state.config.fontSize - FONT_SIZE_STEP) }
+      config: {
+        ...state.config,
+        fontSize: Math.max(MIN_FONT_SIZE, state.config.fontSize - FONT_SIZE_STEP)
+      }
     })),
 
-  setMaxLines: (maxLines) =>
-    set((state) => ({ config: { ...state.config, maxLines } }))
+  setMaxLines: (maxLines) => set((state) => ({ config: { ...state.config, maxLines } }))
 }))

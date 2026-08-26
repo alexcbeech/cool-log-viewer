@@ -25,7 +25,16 @@ export const WorkspaceBar: React.FC<WorkspaceBarProps> = ({ onOpenFile }) => {
 
   return (
     <div
-      style={{ display: 'flex', height: 36, alignItems: 'center', gap: 6, borderBottom: '1px solid var(--border-primary)', backgroundColor: 'var(--bg-secondary)', paddingLeft: 12, paddingRight: 12 }}
+      style={{
+        display: 'flex',
+        height: 36,
+        alignItems: 'center',
+        gap: 6,
+        borderBottom: '1px solid var(--border-primary)',
+        backgroundColor: 'var(--bg-secondary)',
+        paddingLeft: 12,
+        paddingRight: 12
+      }}
     >
       <Button variant="ghost" size="sm" onClick={onOpenFile} title="Open File (Ctrl+O)">
         <FolderOpen size={14} className="mr-1" />

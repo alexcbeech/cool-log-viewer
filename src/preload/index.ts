@@ -1,6 +1,6 @@
-import { contextBridge, ipcRenderer } from 'electron'
+import { contextBridge, ipcRenderer, webUtils } from 'electron'
 import { IPC } from '@shared/ipc-channels'
-import type { ElectronAPI } from './api'
+import type { ElectronAPI } from '@shared/electron-api'
 
 function createListener(channel: string) {
   return (callback: (...args: unknown[]) => void) => {
@@ -16,6 +16,7 @@ function createListener(channel: string) {
 
 const api: ElectronAPI = {
   openFileDialog: () => ipcRenderer.invoke(IPC.FILE_OPEN_DIALOG),
+  getPathForFile: (file) => webUtils.getPathForFile(file),
   startTail: (paneId, filePath) => ipcRenderer.invoke(IPC.FILE_START_TAIL, paneId, filePath),
   stopTail: (paneId) => ipcRenderer.invoke(IPC.FILE_STOP_TAIL, paneId),
   stopAllTails: () => ipcRenderer.invoke(IPC.FILE_STOP_ALL),
@@ -32,13 +33,21 @@ const api: ElectronAPI = {
   onMenuOpenFile: createListener(IPC.MENU_OPEN_FILE) as ElectronAPI['onMenuOpenFile'],
   onMenuClosePane: createListener(IPC.MENU_CLOSE_PANE) as ElectronAPI['onMenuClosePane'],
   onMenuFind: createListener(IPC.MENU_FIND) as ElectronAPI['onMenuFind'],
-  onMenuSplitHorizontal: createListener(IPC.MENU_SPLIT_HORIZONTAL) as ElectronAPI['onMenuSplitHorizontal'],
-  onMenuSplitVertical: createListener(IPC.MENU_SPLIT_VERTICAL) as ElectronAPI['onMenuSplitVertical'],
+  onMenuSplitHorizontal: createListener(
+    IPC.MENU_SPLIT_HORIZONTAL
+  ) as ElectronAPI['onMenuSplitHorizontal'],
+  onMenuSplitVertical: createListener(
+    IPC.MENU_SPLIT_VERTICAL
+  ) as ElectronAPI['onMenuSplitVertical'],
   onMenuToggleFollow: createListener(IPC.MENU_TOGGLE_FOLLOW) as ElectronAPI['onMenuToggleFollow'],
   onMenuToggleTheme: createListener(IPC.MENU_TOGGLE_THEME) as ElectronAPI['onMenuToggleTheme'],
   onMenuNextPane: createListener(IPC.MENU_NEXT_PANE) as ElectronAPI['onMenuNextPane'],
-  onMenuIncreaseFontSize: createListener(IPC.MENU_INCREASE_FONT_SIZE) as ElectronAPI['onMenuIncreaseFontSize'],
-  onMenuDecreaseFontSize: createListener(IPC.MENU_DECREASE_FONT_SIZE) as ElectronAPI['onMenuDecreaseFontSize']
+  onMenuIncreaseFontSize: createListener(
+    IPC.MENU_INCREASE_FONT_SIZE
+  ) as ElectronAPI['onMenuIncreaseFontSize'],
+  onMenuDecreaseFontSize: createListener(
+    IPC.MENU_DECREASE_FONT_SIZE
+  ) as ElectronAPI['onMenuDecreaseFontSize']
 }
 
 contextBridge.exposeInMainWorld('electronAPI', api)

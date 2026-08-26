@@ -36,7 +36,7 @@ export const PaneHeader: React.FC<PaneHeaderProps> = ({ paneId, filePath, onClos
         borderBottom: '1px solid var(--border-primary)',
         backgroundColor: 'var(--bg-secondary)',
         paddingLeft: 12,
-        paddingRight: 8,
+        paddingRight: 8
       }}
     >
       <div
@@ -46,7 +46,7 @@ export const PaneHeader: React.FC<PaneHeaderProps> = ({ paneId, filePath, onClos
           alignItems: 'center',
           gap: 8,
           overflow: 'hidden',
-          minWidth: 0,
+          minWidth: 0
         }}
       >
         {filePath ? (
@@ -58,7 +58,7 @@ export const PaneHeader: React.FC<PaneHeaderProps> = ({ paneId, filePath, onClos
                 fontWeight: 500,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
+                whiteSpace: 'nowrap'
               }}
               title={filePath}
             >
@@ -79,7 +79,7 @@ export const PaneHeader: React.FC<PaneHeaderProps> = ({ paneId, filePath, onClos
           display: 'flex',
           alignItems: 'center',
           gap: 2,
-          marginLeft: 12,
+          marginLeft: 12
         }}
       >
         {filePath && (
@@ -95,20 +95,12 @@ export const PaneHeader: React.FC<PaneHeaderProps> = ({ paneId, filePath, onClos
           </Tooltip>
         )}
         <Tooltip content="Split horizontal (Ctrl+\)">
-          <Button
-            variant="icon"
-            size="sm"
-            onClick={() => splitPane(paneId, 'horizontal')}
-          >
+          <Button variant="icon" size="sm" onClick={() => splitPane(paneId, 'horizontal')}>
             <SplitSquareHorizontal size={14} />
           </Button>
         </Tooltip>
         <Tooltip content="Split vertical (Ctrl+-)">
-          <Button
-            variant="icon"
-            size="sm"
-            onClick={() => splitPane(paneId, 'vertical')}
-          >
+          <Button variant="icon" size="sm" onClick={() => splitPane(paneId, 'vertical')}>
             <SplitSquareVertical size={14} />
           </Button>
         </Tooltip>
@@ -118,7 +110,7 @@ export const PaneHeader: React.FC<PaneHeaderProps> = ({ paneId, filePath, onClos
             height: 14,
             backgroundColor: 'var(--border-secondary)',
             marginLeft: 4,
-            marginRight: 4,
+            marginRight: 4
           }}
         />
         <Tooltip content="Close pane (Ctrl+W)">

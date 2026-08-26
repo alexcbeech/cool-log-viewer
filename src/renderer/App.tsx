@@ -110,7 +110,7 @@ export const App: React.FC = () => {
   useEffect(() => {
     const unsubs = [
       ipcClient.onFileLines((payload: FileLinesPayload) => {
-        appendLines(payload.paneId, payload.lines, payload.isInitial)
+        appendLines(payload.paneId, payload.lines, payload.isInitial, payload.replaceLast)
       }),
       ipcClient.onFileError((payload: FileErrorPayload) => {
         console.error(`File error for pane ${payload.paneId}:`, payload.error)
@@ -183,6 +183,8 @@ export const App: React.FC = () => {
     return () => {
       unsub()
       if (configSaveTimerRef.current) clearTimeout(configSaveTimerRef.current)
+      const state = useConfigStore.getState()
+      if (state.isLoaded) void ipcClient.saveConfig(state.config)
     }
   }, [])
 
@@ -208,18 +210,31 @@ export const App: React.FC = () => {
     })
   }, [setRoot, initPane])
 
-  // Save session before unload
+  // Persist session shortly after layout changes, with a final best-effort unload save.
   useEffect(() => {
+    let saveTimer: ReturnType<typeof setTimeout> | null = null
     const saveSession = (): void => {
       const { root, activePaneId } = usePaneStore.getState()
-      ipcClient.saveSession({
+      void ipcClient.saveSession({
         version: 1,
         paneLayout: root,
         activePaneId
       })
     }
+    const unsubscribe = usePaneStore.subscribe(() => {
+      if (saveTimer) clearTimeout(saveTimer)
+      saveTimer = setTimeout(() => {
+        saveTimer = null
+        saveSession()
+      }, 300)
+    })
     window.addEventListener('beforeunload', saveSession)
-    return () => window.removeEventListener('beforeunload', saveSession)
+    return () => {
+      unsubscribe()
+      if (saveTimer) clearTimeout(saveTimer)
+      saveSession()
+      window.removeEventListener('beforeunload', saveSession)
+    }
   }, [])
 
   return (
