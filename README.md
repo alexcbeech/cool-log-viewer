@@ -2,13 +2,11 @@
 
 A fast, multi-pane log file viewer built for developers who need to monitor and analyze log files in real time. View multiple log files side by side, search through them, highlight patterns, and watch them update live.
 
-## Download
+## Installation status
 
-Pre-built binaries are available on the [Releases](https://github.com/alexcbeech/cool-log-viewer/releases) page. Download the appropriate file for your platform:
+> **Build from source for now.** The files on the [Releases](https://github.com/alexcbeech/cool-log-viewer/releases) page are not recent verified builds and do not include the latest fixes from `main`. The automated release process is still being repaired.
 
-- **Windows**: `.exe` installer or portable executable
-- **macOS**: `.dmg` disk image
-- **Linux**: `.AppImage`
+To use the current version, follow the source installation steps below. Run the app directly with `npm run dev`, or create a local executable with `npm run pack`.
 
 ## Features
 
@@ -85,15 +83,15 @@ git clone https://github.com/alexcbeech/cool-log-viewer.git
 cd cool-log-viewer
 ```
 
-### Step 3: Install dependencies
+### Step 3: Install locked dependencies
 
-This downloads all the libraries the application needs. It may take a few minutes the first time.
+This installs the exact dependency versions verified by the project. It may take a few minutes the first time.
 
 ```bash
-npm install
+npm ci
 ```
 
-Review installation warnings, especially security or unsupported-version notices, before continuing.
+Review installation warnings, especially security or unsupported-version notices, before continuing. Use `npm install` only when intentionally changing dependencies.
 
 ## Running the Application
 
@@ -117,18 +115,35 @@ npm run build
 
 The compiled output is written to the `out/` folder.
 
-### Packaged builds
+### Local packaged application
 
-To create distributable binaries:
+To create an unpacked application that you can run locally without the development server:
+
+```bash
+npm run pack
+```
+
+The application is written to the platform-specific folder under `dist/`. On Windows, launch:
+
+```text
+dist/win-unpacked/Cool Log Viewer.exe
+```
+
+### Installers and portable builds
+
+To create an installer or portable package for your current platform:
 
 ```bash
 npm run dist
 ```
 
-This generates platform-specific packages in the `dist/` folder:
+This generates platform-specific packages in the `dist/` folder. These local packages are currently unsigned, so your operating system may display an unknown-publisher warning.
+
 - **Windows**: NSIS installer (`.exe`) and portable executable (`.exe`)
 - **macOS**: DMG disk image (`.dmg`) — must be built on macOS
 - **Linux**: AppImage (`.AppImage`) — must be built on Linux
+
+Build packages on the operating system they target. Until the release process is restored, locally built artifacts are the supported way to run the latest code.
 
 ## Usage
 
@@ -170,10 +185,10 @@ Click the theme icon in the bottom-right corner to cycle between Light, Dark, an
 
 ## Troubleshooting
 
-### "npm install" fails
+### "npm ci" fails
 
 - Make sure you have Node.js 22.12 or later: `node --version`
-- Run `npm ci` to reinstall the exact dependency versions recorded in `package-lock.json`
+- Close any running copy of the app and rerun `npm ci`; it recreates `node_modules` from `package-lock.json`
 - On Windows, run your terminal as Administrator if you see permission errors
 
 ### The app window doesn't open
