@@ -6,6 +6,7 @@ interface PaneLogState {
   lines: LogLine[]
   followMode: boolean
   lineCount: number
+  error: string | null
 }
 
 interface LogStore {
@@ -20,13 +21,14 @@ interface LogStore {
     replaceLast?: boolean
   ) => void
   clearLines: (paneId: string) => void
+  setError: (paneId: string, error: string | null) => void
   setFollowMode: (paneId: string, follow: boolean) => void
   toggleFollowMode: (paneId: string) => void
   getPaneState: (paneId: string) => PaneLogState | undefined
 }
 
 function createPaneState(): PaneLogState {
-  return { lines: [], followMode: true, lineCount: 0 }
+  return { lines: [], followMode: true, lineCount: 0, error: null }
 }
 
 export const useLogStore = create<LogStore>((set, get) => ({
@@ -82,6 +84,7 @@ export const useLogStore = create<LogStore>((set, get) => ({
       panes.set(paneId, {
         ...paneState,
         lines: combined,
+        error: null,
         lineCount: isInitial
           ? logLines.length
           : paneState.lineCount + newLines.length - (canReplaceLast ? 1 : 0)
@@ -94,7 +97,16 @@ export const useLogStore = create<LogStore>((set, get) => ({
       const panes = new Map(state.panes)
       const paneState = panes.get(paneId)
       if (!paneState) return state
-      panes.set(paneId, { ...paneState, lines: [], lineCount: 0 })
+      panes.set(paneId, { ...paneState, lines: [], lineCount: 0, error: null })
+      return { panes }
+    }),
+
+  setError: (paneId, error) =>
+    set((state) => {
+      const panes = new Map(state.panes)
+      const paneState = panes.get(paneId)
+      if (!paneState) return state
+      panes.set(paneId, { ...paneState, error })
       return { panes }
     }),
 

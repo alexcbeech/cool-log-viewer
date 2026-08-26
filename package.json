@@ -2,6 +2,15 @@
   "name": "cool-log-viewer",
   "version": "0.1.0",
   "description": "A fast, multi-pane log viewer for developers",
+  "author": "alexcbeech",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alexcbeech/cool-log-viewer.git"
+  },
+  "homepage": "https://github.com/alexcbeech/cool-log-viewer#readme",
+  "bugs": {
+    "url": "https://github.com/alexcbeech/cool-log-viewer/issues"
+  },
   "main": "./out/main/index.js",
   "scripts": {
     "dev": "electron-vite dev",

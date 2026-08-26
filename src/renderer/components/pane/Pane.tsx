@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react'
-import { FolderOpen } from 'lucide-react'
+import { AlertTriangle, FolderOpen, X } from 'lucide-react'
 import { PaneHeader } from './PaneHeader'
 import { LogView } from '../log-view/LogView'
 import { SearchBar } from '../search/SearchBar'
 import { usePaneStore } from '../../stores/pane-store'
 import { useSearchStore } from '../../stores/search-store'
+import { useLogStore } from '../../stores/log-store'
 import { useDragDrop } from '../../hooks/useDragDrop'
 
 interface PaneProps {
@@ -19,6 +20,8 @@ export const Pane: React.FC<PaneProps> = ({ paneId, filePath, onOpenFile, onClos
   const setActivePane = usePaneStore((s) => s.setActivePane)
   const isActive = paneId === activePaneId
   const searchState = useSearchStore((s) => s.getSearchState(paneId))
+  const error = useLogStore((s) => s.panes.get(paneId)?.error)
+  const setError = useLogStore((s) => s.setError)
 
   const handleFileDrop = useCallback(
     (droppedPath: string) => {
@@ -45,10 +48,31 @@ export const Pane: React.FC<PaneProps> = ({ paneId, filePath, onOpenFile, onClos
       <PaneHeader paneId={paneId} filePath={filePath} onClosePane={onClosePane} />
       <div className="relative flex-1 overflow-hidden">
         {filePath ? (
-          <>
-            <LogView paneId={paneId} />
-            {searchState.isSearchOpen && <SearchBar paneId={paneId} />}
-          </>
+          <div className="flex h-full min-h-0 flex-col">
+            {error && (
+              <div
+                role="alert"
+                className="flex items-center gap-2 border-b border-amber-500/40 bg-amber-500/10 px-3 py-2 text-xs text-amber-200"
+              >
+                <AlertTriangle size={14} className="shrink-0" />
+                <span className="min-w-0 flex-1 truncate" title={error}>
+                  {error}
+                </span>
+                <button
+                  type="button"
+                  className="rounded p-0.5 hover:bg-amber-500/20"
+                  aria-label="Dismiss file error"
+                  onClick={() => setError(paneId, null)}
+                >
+                  <X size={13} />
+                </button>
+              </div>
+            )}
+            <div className="relative min-h-0 flex-1">
+              <LogView paneId={paneId} />
+              {searchState.isSearchOpen && <SearchBar paneId={paneId} />}
+            </div>
+          </div>
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-3 text-[var(--text-muted)]">
             <FolderOpen size={48} strokeWidth={1} />

@@ -32,4 +32,21 @@ describe('log store line replacement', () => {
     ])
     expect(pane?.lineCount).toBe(2)
   })
+
+  it('stores and clears a visible file error', () => {
+    const store = useLogStore.getState()
+    store.setError('pane-1', 'File was deleted')
+    expect(useLogStore.getState().getPaneState('pane-1')?.error).toBe('File was deleted')
+
+    store.setError('pane-1', null)
+    expect(useLogStore.getState().getPaneState('pane-1')?.error).toBeNull()
+  })
+
+  it('clears a stale file error when reading resumes', () => {
+    const store = useLogStore.getState()
+    store.setError('pane-1', 'Temporarily unavailable')
+    store.appendLines('pane-1', ['reconnected'], true)
+
+    expect(useLogStore.getState().getPaneState('pane-1')?.error).toBeNull()
+  })
 })

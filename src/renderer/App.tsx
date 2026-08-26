@@ -35,6 +35,7 @@ export const App: React.FC = () => {
   const removePane = useLogStore((s) => s.removePane)
   const appendLines = useLogStore((s) => s.appendLines)
   const clearLines = useLogStore((s) => s.clearLines)
+  const setError = useLogStore((s) => s.setError)
   const cycleTheme = useConfigStore((s) => s.cycleTheme)
   const [highlightsOpen, setHighlightsOpen] = useState(false)
 
@@ -113,7 +114,7 @@ export const App: React.FC = () => {
         appendLines(payload.paneId, payload.lines, payload.isInitial, payload.replaceLast)
       }),
       ipcClient.onFileError((payload: FileErrorPayload) => {
-        console.error(`File error for pane ${payload.paneId}:`, payload.error)
+        setError(payload.paneId, payload.error)
       }),
       ipcClient.onFileTruncated((payload: FileTruncatedPayload) => {
         clearLines(payload.paneId)
@@ -141,7 +142,7 @@ export const App: React.FC = () => {
     ]
 
     return () => unsubs.forEach((unsub) => unsub())
-  }, [activePaneId, openFile, appendLines, clearLines, splitPane, closePane, cycleTheme])
+  }, [activePaneId, openFile, appendLines, clearLines, setError, splitPane, closePane, cycleTheme])
 
   // Load config on mount
   useEffect(() => {
